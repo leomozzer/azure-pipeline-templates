@@ -1,0 +1,17 @@
+parameters:
+  - name: working_dir
+  - name: file_name
+  - name: storage_account_name
+  - name: container_name
+
+steps:
+  - task: AzureCLI@2
+    displayName: UploadFile
+    continueOnError: true
+    inputs:
+      workingDirectory: '${{ parameters.working_dir }}'
+      azureSubscription: 'AzureDevOps'
+      scriptType: 'pscore'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        az storage blob upload --account-name ${{ parameters.storage_account_name }} --container-name ${{ parameters.container_name }} --name ${{ parameters.file_name }} --file ${{ parameters.file_name }} --auth-mode key --overwrite
