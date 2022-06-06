@@ -1,0 +1,12 @@
+parameters:
+  - name: myVar
+    default: "It's alive!"
+
+stages:
+  - stage: dev
+    jobs:
+    - job: Linux
+      pool:
+        vmImage: ubuntu-latest
+      steps:
+      - bash: echo "$(myVar)"
