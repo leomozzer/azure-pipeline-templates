@@ -9,4 +9,4 @@ stages:
       pool:
         vmImage: ubuntu-latest
       steps:
-      - bash: echo "$(myVar)"
+      - bash: echo "${myVar}"
