@@ -46,4 +46,4 @@ stages:
         displayName: Run ps1 script workingDirectory
         inputs:
           filePath: 'file.ps1'
-          workingDirectory: ./pipelines/demo-pipeline/
+          workingDirectory: './pipelines/demo-pipeline/'
