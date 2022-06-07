@@ -22,7 +22,7 @@ stages:
       - task: PowerShell@2
         displayName: Run ps1 script
         inputs:
-          filePath: '/pipelines/demo-pipeline/file.ps1'
+          filePath: './pipelines/demo-pipeline/file.ps1'
       - task: PowerShell@2
         displayName: Run ps1 script workingDirectory
         inputs:
