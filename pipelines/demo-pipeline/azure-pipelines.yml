@@ -12,6 +12,7 @@ stages:
       pool:
         vmImage: ubuntu-latest #or ubuntu-20.04
       steps:
+      - bash: echo "ls -ltr"
       - bash: echo "Parameters ${{ parameters.myVar }}"
       - task: Bash@3
         displayName: Display Variable
@@ -22,7 +23,7 @@ stages:
         displayName: Run ps1 script
         inputs:
           filePath: 'file.ps1'
-          
+
     - job: Windows
       pool:
         vmImage: windows-latest #or windows-2022
