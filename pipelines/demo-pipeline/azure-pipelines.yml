@@ -18,6 +18,11 @@ stages:
         inputs:
           targetType: 'inline'
           script: echo 'Variables $(myVariable)'
+      - task: PowerShell@2
+        displayName: Run ps1 script
+        inputs:
+          filePath: 'file.ps1'
+          
     - job: Windows
       pool:
         vmImage: windows-latest #or windows-2022
@@ -26,4 +31,8 @@ stages:
         displayName: Display parameter
         inputs:
           targetType: 'inline'
-          script: 'Write-Host "parameters: ${{ parameters.myVar }}"' 
+          script: 'Write-Host "parameters: ${{ parameters.myVar }}"'
+      - task: PowerShell@2
+        displayName: Run ps1 script
+        inputs:
+          filePath: 'file.ps1'
