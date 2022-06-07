@@ -3,9 +3,6 @@ parameters:
     default: "It's alive!"
 
 variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
   myVariable: 'ValueFromVar'
 
 stages:
@@ -13,10 +10,20 @@ stages:
     jobs:
     - job: Linux
       pool:
-        vmImage: ubuntu-latest
+        vmImage: ubuntu-latest #or ubuntu-20.04
       steps:
       - bash: echo "Parameters ${{ parameters.myVar }}"
       - task: Bash@3
+        displayName: Display Variable
         inputs:
           targetType: 'inline'
           script: echo 'Variables $(myVariable)'
+    - job: Windows
+      pool:
+        vmImage: windows-latest #or windows-2022
+      steps:
+      - task: PowerShell@2
+        displayName: Display parameter
+        inputs:
+          targetType: 'inline'
+          script: 'Write-Host "parameters: ${{ parameters.myVar }}"' 
