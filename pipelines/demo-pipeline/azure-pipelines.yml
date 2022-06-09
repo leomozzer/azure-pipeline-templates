@@ -32,6 +32,12 @@ stages:
           inlineScript: |
             az --version
             az account show
+      - task: PowerShell@2
+        displayName: 'Get-AzResourceGroup'
+        inputs:
+          targetType: 'inline'
+          script: |
+            Get-AzResourceGroup
 
     - job: Windows
       pool:
