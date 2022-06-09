@@ -30,7 +30,7 @@ stages:
           scriptType: 'pscore'
           scriptLocation: 'inlineScript'
           inlineScript: |
-            Write host "Hello"
+            Write-host "Hello"
             az group list
 
     - job: Windows
