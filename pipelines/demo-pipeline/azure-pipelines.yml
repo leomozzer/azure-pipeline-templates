@@ -23,12 +23,14 @@ stages:
         displayName: Run ps1 script file
         inputs:
           filePath: './pipelines/demo-pipeline/file.ps1'
-      - task: PowerShell@2
-        displayName: 'Get-AzResourceGroup'
+      - task: AzureCLI@2
+        displayName: 'Restart Container'
         inputs:
           azureSubscription: 'AzureDevOps'
-          targetType: 'inline'
-          script: |
+          scriptType: 'pscore'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
+            Write host "Hello"
             az group list
 
     - job: Windows
