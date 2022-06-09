@@ -42,8 +42,12 @@ stages:
         displayName: Run ps1 script file
         inputs:
           filePath: './pipelines/demo-pipeline/file.ps1'
-      - task: PowerShell@2
-        displayName: Display parameter
+      - task: AzureCLI@2
+        displayName: Azure CLI
         inputs:
-          targetType: 'inline'
-          script: 'Get-AzResourceGroup'
+          azureSubscription: 'AzureDevOps'
+          scriptType: ps
+          scriptLocation: inlineScript
+          inlineScript: |
+            az --version
+            az account show
