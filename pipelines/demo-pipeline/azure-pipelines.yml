@@ -29,7 +29,7 @@ stages:
           azureSubscription: 'AzureDevOps'
           targetType: 'inline'
           script: |
-            Get-AzResourceGroup
+            az group list
 
     - job: Windows
       pool:
