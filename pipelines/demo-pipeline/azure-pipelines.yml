@@ -20,14 +20,14 @@ stages:
           targetType: 'inline'
           script: echo 'Variables $(myVariable)'
       - task: PowerShell@2
-        displayName: Run ps1 script
+        displayName: Display parameter
+        inputs:
+          targetType: 'inline'
+          script: 'Get-AzResourceGroup'
+      - task: PowerShell@2
+        displayName: Run ps1 script file
         inputs:
           filePath: './pipelines/demo-pipeline/file.ps1'
-      - task: PowerShell@2
-        displayName: Run ps1 script workingDirectory
-        inputs:
-          filePath: 'file.ps1'
-          workingDirectory: './pipelines/demo-pipeline/'
 
     - job: Windows
       pool:
@@ -39,11 +39,11 @@ stages:
           targetType: 'inline'
           script: 'Write-Host "parameters: ${{ parameters.myVar }}"'
       - task: PowerShell@2
-        displayName: Run ps1 script
+        displayName: Run ps1 script file
         inputs:
           filePath: './pipelines/demo-pipeline/file.ps1'
       - task: PowerShell@2
-        displayName: Run ps1 script workingDirectory
+        displayName: Display parameter
         inputs:
-          filePath: 'file.ps1'
-          workingDirectory: './pipelines/demo-pipeline/'
+          targetType: 'inline'
+          script: 'Get-AzResourceGroup'
