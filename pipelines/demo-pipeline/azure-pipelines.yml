@@ -20,14 +20,18 @@ stages:
           targetType: 'inline'
           script: echo 'Variables $(myVariable)'
       - task: PowerShell@2
-        displayName: Display parameter
-        inputs:
-          targetType: 'inline'
-          script: 'Get-AzResourceGroup'
-      - task: PowerShell@2
         displayName: Run ps1 script file
         inputs:
           filePath: './pipelines/demo-pipeline/file.ps1'
+      - task: AzureCLI@2
+        displayName: Azure CLI
+        inputs:
+          azureSubscription: 'AzureDevOps'
+          scriptType: ps
+          scriptLocation: inlineScript
+          inlineScript: |
+            az --version
+            az account show
 
     - job: Windows
       pool:
