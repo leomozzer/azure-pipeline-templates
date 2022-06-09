@@ -53,3 +53,4 @@ stages:
           inlineScript: |
             az --version
             az account show
+            az group list
