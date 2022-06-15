@@ -55,3 +55,4 @@ stages:
           inlineScript: |
             Write-host "Hello"
             az group list
+      - bash: ls -ltr
