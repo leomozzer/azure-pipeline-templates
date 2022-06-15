@@ -24,7 +24,7 @@ stages:
         inputs:
           filePath: './pipelines/demo-pipeline/file.ps1'
       - task: AzureCLI@2
-        displayName: 'Restart Container'
+        displayName: 'Azure CLI'
         inputs:
           azureSubscription: 'AzureDevOps'
           scriptType: 'pscore'
@@ -53,6 +53,5 @@ stages:
           scriptType: ps
           scriptLocation: inlineScript
           inlineScript: |
-            az --version
-            az account show
+            Write-host "Hello"
             az group list
