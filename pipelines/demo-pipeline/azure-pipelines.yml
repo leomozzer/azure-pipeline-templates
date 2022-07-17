@@ -24,6 +24,7 @@ stages:
         inputs:
           filePath: './pipelines/demo-pipeline/file.ps1'
       - task: AzureCLI@2
+        
         displayName: 'Azure CLI'
         inputs:
           azureSubscription: 'AzureDevOps'
