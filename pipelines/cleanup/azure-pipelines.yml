@@ -29,7 +29,7 @@ stages:
       - task: AzureCLI@2
         displayName: 'Azure CLI'
         inputs:
-          azureSubscription:  ${{ variables.service_connection_name }
+          azureSubscription:  ${{ variables.service_connection_name }}
           scriptType: 'pscore'
           scriptLocation: 'inlineScript'
           inlineScript: |
