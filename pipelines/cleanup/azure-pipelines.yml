@@ -1,0 +1,35 @@
+# trigger:
+#   batch: true
+#   branches:
+#     include:
+#     - main
+#   paths:
+#     exclude: 
+#     - README.md
+#     - LICENSE
+#     - api
+#     - website
+#     include:
+#     - db
+#     - pipelines/database/azure-pipelines.yml
+
+variables:
+  service_connection_name: "SC-AzureDevOps" 
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+  - stage: main
+    jobs:
+      pool:
+        vmImage: ubuntu-latest #or ubuntu-20.04
+        steps:
+          - task: AzureCLI@2
+          displayName: 'Azure CLI'
+          inputs:
+            azureSubscription:  ${{ variables.service_connection_name }
+            scriptType: 'pscore'
+            scriptLocation: 'inlineScript'
+            inlineScript: |
+              az group list --query "[?tags.delete == 'true']" -o tsv | xargs -otl az group delete --no-wait  -n
