@@ -111,11 +111,17 @@ stages:
     condition: succeeded('mainCondition')
     dependsOn: mainCondition
     jobs:
-    - job: NoCondtions
+    - job: ManualValidation
       pool:
         vmImage: ubuntu-latest #or ubuntu-20.04
-      steps:
-      - script: echo Performing the stage conditions in the $(Build.SourceBranch)
+      timeoutInMinutes: 15 # job times out in 3 days
+      - task: ManualValidation@0
+        timeoutInMinutes: 10 # task times out in 1 day
+        inputs:
+            notifyUsers: |
+                mozzer.ferraz@gmail.com
+            instructions: 'Please validate the build configuration and resume'
+            onTimeout: 'resume'
 
 
 ## Run on strategy mode
