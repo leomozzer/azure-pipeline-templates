@@ -22,15 +22,19 @@ pool:
 stages:
   - stage: main
     jobs:
-    - job: Linux
+    - job: CleanUp
       pool:
         vmImage: ubuntu-latest #or ubuntu-20.04
       steps:
       - task: AzureCLI@2
-        displayName: 'Azure CLI'
+        displayName: 'Delete RGs'
         inputs:
           azureSubscription:  ${{ variables.service_connection_name }}
           scriptType: 'pscore'
           scriptLocation: 'inlineScript'
           inlineScript: |
-            az group list --query "[?tags.delete == 'true']" -o tsv | xargs -otl az group delete --no-wait  -n
+
+            az group list --query "[?tags.delete == 'true'].name" -o tsv | xargs --no-run-if-empty -l az group delete --yes --name
+
+            az group list --query "[?tags.delete == 'true'].name" -o table | xargs -otl az group delete --no-wait --yes -n
+            az group list --query "[?tags.delete == 'true']" -o tsv | grep rg
