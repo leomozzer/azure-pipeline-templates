@@ -76,7 +76,7 @@ stages:
             Write-host "Hello"
             az group list
 
-  - stage: conditions
+  - stage: mainCondition
     displayName: Conditions Checking when branch is main
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
     jobs:
@@ -98,8 +98,9 @@ stages:
       steps:
       - script: echo If conditionTrigger2 === false then skip this job
 
-  - stage: conditions2
+  - stage: brachConditions
     displayName: Conditions Checking when branch is not main
+    dependsOn: 
     condition: ne(variables['Build.SourceBranch'], 'refs/heads/main')
     jobs:
     - job: NoCondtions
@@ -119,6 +120,17 @@ stages:
         vmImage: ubuntu-latest #or ubuntu-20.04
       steps:
       - script: echo If conditionTrigger2 === false then skip this job
+
+  - stage: Approval
+    displayName: Job to request for approval
+    condition: succeeded('mainCondition')
+    dependsOn: mainCondition
+    jobs:
+    - job: NoCondtions
+      pool:
+        vmImage: ubuntu-latest #or ubuntu-20.04
+      steps:
+      - script: echo Performing the stage conditions in the $(Build.SourceBranch)
 
 
 ## Run on strategy mode
