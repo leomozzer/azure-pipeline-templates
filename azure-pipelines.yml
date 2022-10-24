@@ -49,5 +49,30 @@ stages:
             Write-host "Hello"
             az group list
       - bash: ls -ltr
-      
-  - template: ./conditions/azure-pipelines.yml
+
+  - stage: conditions
+    displayName: Conditions Checking
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/main'
+    jobs:
+    - job: Linux
+      pool:
+        vmImage: ubuntu-latest #or ubuntu-20.04
+      steps:
+      - bash: ls -ltr
+      - bash: echo "Parameters ${{ parameters.myVar }}"
+      - task: Bash@3
+        displayName: Display Variable
+        inputs:
+          targetType: 'inline'
+          script: echo 'Variables $(myVariable)'
+      - task: AzureCLI@2
+        
+        displayName: 'Azure CLI'
+        inputs:
+          azureSubscription: 'AzureDevOps'
+          scriptType: 'pscore'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
+            Write-host "Hello"
+            az group list
+
