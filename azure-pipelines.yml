@@ -114,6 +114,7 @@ stages:
     - job: ManualValidation
       pool: server
       timeoutInMinutes: 15 # job times out in 3 days
+      steps:
       - task: ManualValidation@0
         timeoutInMinutes: 10 # task times out in 1 day
         inputs:
