@@ -49,5 +49,5 @@ stages:
             Write-host "Hello"
             az group list
       - bash: ls -ltr
-  - stage: Conditions
-    - template: ./conditions/azure-pipelines.yml
+      
+  - template: ./conditions/azure-pipelines.yml
