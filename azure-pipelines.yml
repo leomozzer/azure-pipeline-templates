@@ -86,7 +86,7 @@ stages:
       steps:
       - bash: ls -ltr
     - job: Condition1
-      condition: eq(${{ parameters.conditionTrigger1 }}, true)
+      condition: eq($(conditionTrigger1), true)
       pool:
         vmImage: ubuntu-latest #or ubuntu-20.04
       steps:
