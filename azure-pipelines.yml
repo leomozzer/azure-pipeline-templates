@@ -15,6 +15,9 @@ strategy:
       imageName: "windows-latest"
   maxParallel: 3
 
+pool:
+  vmImage: $(imageName)
+
 
 stages:
   - stage: multiPool
