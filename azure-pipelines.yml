@@ -117,10 +117,22 @@ stages:
         vmImage: ubuntu-latest #or ubuntu-20.04
       steps:
       - template: ./templates/branch/generic.yml
-        
+            
+  - stage: dev
+    displayName: Run dev stage
+    dependsOn:
+    condition: or(succeeded('mainCondition'), succeeded('brachConditions'))
+    jobs:
+      - job: build
+        pool:
+          vmImage: ubuntu-latest 
+        displayName: run prod template
+        steps:
+        - template: ./templates/stages/dev.yml
+  
   - stage: approval
     displayName: Job to request for approval
-    condition: succeeded('mainCondition')
+    condition: and(succeeded('mainCondition'), succeeded('dev'))
     dependsOn: 
     - mainCondition
     - dev
@@ -136,20 +148,6 @@ stages:
                 mozzer.ferraz@gmail.com
             instructions: 'Please validate the build configuration and resume'
             onTimeout: 'reject '
-    
-  - stage: dev
-    displayName: Run dev stage
-    dependsOn:
-    - brachConditions
-    - mainCondition
-    condition: 
-    jobs:
-      - job: build
-        pool:
-          vmImage: ubuntu-latest 
-        displayName: run prod template
-        steps:
-        - template: ./templates/stages/dev.yml
 
   - stage: prod
     displayName: Run prod stage
