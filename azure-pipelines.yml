@@ -121,7 +121,9 @@ stages:
   - stage: approval
     displayName: Job to request for approval
     condition: succeeded('mainCondition')
-    dependsOn: mainCondition
+    dependsOn: 
+    - mainCondition
+    - dev
     jobs:
     - job: ManualValidation
       pool: server
@@ -153,7 +155,6 @@ stages:
     displayName: Run prod stage
     dependsOn: 
     - approval
-    - dev
     condition: succeeded('approval')
     jobs:
       - job: build
