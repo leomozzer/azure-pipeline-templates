@@ -82,6 +82,12 @@ stages:
         vmImage: ubuntu-latest #or ubuntu-20.04
       steps:
       - script: echo If conditionTrigger2 === false then skip this job
+    - job: mainTemplate
+      displayName: "Run the main template"
+      pool:
+        vmImage: ubuntu-latest #or ubuntu-20.04
+      steps:
+      - template: ./templates/stages/main.yml
 
   - stage: brachConditions
     displayName: Conditions Checking when branch is not main
@@ -105,17 +111,12 @@ stages:
         vmImage: ubuntu-latest #or ubuntu-20.04
       steps:
       - script: echo If conditionTrigger2 === false then skip this job
-
-  - stage: dev
-    displayName: Run prod stage
-    dependsOn: brachConditions
-    jobs:
-      - job: build
-        pool:
-          vmImage: ubuntu-latest 
-        displayName: run prod template
-        steps:
-        - template: ./templates/stages/dev.yml
+    - job: genericTemplate
+      displayName: "Run a generic template"
+      pool:
+        vmImage: ubuntu-latest #or ubuntu-20.04
+      steps:
+      - template: ./templates/stages/generic.yml
         
   - stage: approval
     displayName: Job to request for approval
@@ -134,16 +135,27 @@ stages:
             instructions: 'Please validate the build configuration and resume'
             onTimeout: 'resume'
     
-  - stage: prod
-    displayName: Run prod stage
-    dependsOn: approval
-    jobs:
-      - job: build
-        pool:
-          vmImage: ubuntu-latest 
-        displayName: run prod template
-        steps:
-        - template: ./templates/stages/prod.yml
+  # - stage: dev
+  #   displayName: Run dev stage
+  #   dependsOn: brachConditions
+  #   jobs:
+  #     - job: build
+  #       pool:
+  #         vmImage: ubuntu-latest 
+  #       displayName: run prod template
+  #       steps:
+  #       - template: ./templates/stages/dev.yml
+
+  # - stage: prod
+  #   displayName: Run prod stage
+  #   dependsOn: [mainCondition, approval]
+  #   jobs:
+  #     - job: build
+  #       pool:
+  #         vmImage: ubuntu-latest 
+  #       displayName: run prod template
+  #       steps:
+  #       - template: ./templates/stages/prod.yml
         
 
 ## Run on strategy mode
