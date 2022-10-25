@@ -135,16 +135,19 @@ stages:
             instructions: 'Please validate the build configuration and resume'
             onTimeout: 'reject '
     
-  # - stage: dev
-  #   displayName: Run dev stage
-  #   dependsOn: brachConditions
-  #   jobs:
-  #     - job: build
-  #       pool:
-  #         vmImage: ubuntu-latest 
-  #       displayName: run prod template
-  #       steps:
-  #       - template: ./templates/stages/dev.yml
+  - stage: dev
+    displayName: Run dev stage
+    dependsOn:
+    - brachConditions
+    - mainCondition
+    condition: 
+    jobs:
+      - job: build
+        pool:
+          vmImage: ubuntu-latest 
+        displayName: run prod template
+        steps:
+        - template: ./templates/stages/dev.yml
 
   # - stage: prod
   #   displayName: Run prod stage
