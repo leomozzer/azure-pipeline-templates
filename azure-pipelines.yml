@@ -114,7 +114,8 @@ stages:
         pool:
           vmImage: ubuntu-latest 
         displayName: run prod template
-        template: ./templates/stages/prod.yml
+        steps:
+        - template: ./templates/stages/dev.yml
         
   - stage: approval
     displayName: Job to request for approval
@@ -141,7 +142,9 @@ stages:
         pool:
           vmImage: ubuntu-latest 
         displayName: run prod template
-        template: ./templates/stages/prod.yml
+        steps:
+        - template: ./templates/stages/prod.yml
+        
 
 ## Run on strategy mode
 #will perform only using "steps"
