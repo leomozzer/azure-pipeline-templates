@@ -133,7 +133,7 @@ stages:
             notifyUsers: |
                 mozzer.ferraz@gmail.com
             instructions: 'Please validate the build configuration and resume'
-            onTimeout: 'resume'
+            onTimeout: 'reject '
     
   # - stage: dev
   #   displayName: Run dev stage
