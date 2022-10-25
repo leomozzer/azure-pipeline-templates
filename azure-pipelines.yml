@@ -121,6 +121,8 @@ stages:
   - stage: dev
     displayName: Run dev stage
     dependsOn:
+    - mainCondition
+    - brachConditions
     condition: or(succeeded('mainCondition'), succeeded('brachConditions'))
     jobs:
       - job: build
