@@ -149,16 +149,19 @@ stages:
         steps:
         - template: ./templates/stages/dev.yml
 
-  # - stage: prod
-  #   displayName: Run prod stage
-  #   dependsOn: [mainCondition, approval]
-  #   jobs:
-  #     - job: build
-  #       pool:
-  #         vmImage: ubuntu-latest 
-  #       displayName: run prod template
-  #       steps:
-  #       - template: ./templates/stages/prod.yml
+  - stage: prod
+    displayName: Run prod stage
+    dependsOn: 
+    - approval
+    - dev
+    condition: succeeded('approval')
+    jobs:
+      - job: build
+        pool:
+          vmImage: ubuntu-latest 
+        displayName: run prod template
+        steps:
+        - template: ./templates/stages/prod.yml
         
 
 ## Run on strategy mode
