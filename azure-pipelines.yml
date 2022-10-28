@@ -99,7 +99,7 @@ stages:
     displayName: "Testing job template"
     condition: always()
     jobs:
-      - template: ./templates/jobs/job.yml
+      - template: ./templates/jobs/jobs.yml
             
   - stage: dev
     displayName: Run dev stage
@@ -146,7 +146,7 @@ stages:
         displayName: run prod template
         steps:
         - template: ./templates/steps/prod.yml
-      - template: ./templates/jobs/job.yml
+      - template: ./templates/jobs/jobs.yml
         
 
 ## Run on strategy mode
