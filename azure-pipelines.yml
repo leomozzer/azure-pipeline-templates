@@ -19,7 +19,8 @@ stages:
       pool:
         vmImage: ubuntu-latest #or ubuntu-20.04
       steps:
-      - script: echo Performing the stage conditions in the main branch
+      - script: echo parameters ${{ parameters.myVar }}
+      - script: echo parameters $(myVariable)
 
     - job: Windows
       pool:
@@ -30,6 +31,7 @@ stages:
         inputs:
           targetType: 'inline'
           script: 'Write-Host "parameters: ${{ parameters.myVar }}"'
+
 
     # - job: macOS
     #   pool:
