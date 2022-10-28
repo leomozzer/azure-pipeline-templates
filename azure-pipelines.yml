@@ -99,7 +99,7 @@ stages:
     displayName: "Testing job template"
     condition: always()
     jobs:
-      - template: ./templates/stages/job.yml
+      - template: ./templates/jobs/job.yml
             
   - stage: dev
     displayName: Run dev stage
