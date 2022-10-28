@@ -97,6 +97,7 @@ stages:
 
   - stage: testJob
     displayName: "Testing job template"
+    condition: always()
     jobs:
       - template: ./templates/stages/job.yml
             
@@ -110,7 +111,7 @@ stages:
       - job: build
         pool:
           vmImage: ubuntu-latest 
-        displayName: run prod template
+        displayName: run dev template
         steps:
         - template: ./templates/stages/dev.yml
   
