@@ -96,6 +96,21 @@ stages:
       steps:
       - template: ./templates/branch/generic.yml
 
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+    - stage: mainBranch
+      jobs:
+        - template: ./templates/jobs/jobs.yml
+  
+  - ${{ else }}:
+    - stage: otherBranches
+      jobs:
+      - job: genericTemplate
+        displayName: "Run a generic template"
+        pool:
+          vmImage: ubuntu-latest #or ubuntu-20.04
+        steps:
+        - template: ./templates/branch/generic.yml
+
   - stage: testJob
     displayName: "Testing job template"
     condition: always()
