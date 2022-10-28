@@ -6,6 +6,9 @@ variables:
   myVariable: 'ValueFromVar'
   conditionTrigger1: true
   conditionTrigger2: false
+
+pool:
+  vmImage: ubuntu-latest #The pool can be used not only inside of each job
   
 
 stages:
@@ -18,47 +21,21 @@ stages:
       steps:
       - script: echo Performing the stage conditions in the main branch
 
-    # - job: Windows
-    #   pool:
-    #     vmImage: windows-latest #or windows-2022
-    #   steps:
-    #   - task: PowerShell@2
-    #     displayName: Display parameter
-    #     inputs:
-    #       targetType: 'inline'
-    #       script: 'Write-Host "parameters: ${{ parameters.myVar }}"'
-    #   - task: AzureCLI@2
-    #     displayName: Azure CLI
-    #     inputs:
-    #       azureSubscription: 'SC-AzureDevOps'
-    #       scriptType: ps
-    #       scriptLocation: inlineScript
-    #       inlineScript: |
-    #         Write-host "Hello"
-    #         az group list
-    #   - bash: ls -ltr
+    - job: Windows
+      pool:
+        vmImage: windows-latest #or windows-2022
+      steps:
+      - task: PowerShell@2
+        displayName: Display parameter
+        inputs:
+          targetType: 'inline'
+          script: 'Write-Host "parameters: ${{ parameters.myVar }}"'
 
     # - job: macOS
     #   pool:
     #     vmImage: macOS-latest
     #   steps:
     #   - bash: ls -ltr
-    #   - bash: echo "Parameters ${{ parameters.myVar }}"
-    #   - task: Bash@3
-    #     displayName: Display Variable
-    #     inputs:
-    #       targetType: 'inline'
-    #       script: echo 'Variables $(myVariable)'
-    #   - task: AzureCLI@2
-        
-    #     displayName: 'Azure CLI'
-    #     inputs:
-    #       azureSubscription: 'SC-AzureDevOps'
-    #       scriptType: 'pscore'
-    #       scriptLocation: 'inlineScript'
-    #       inlineScript: |
-    #         Write-host "Hello"
-    #         az group list
 
   - stage: mainCondition
     displayName: Conditions Checking when branch is main
@@ -117,6 +94,10 @@ stages:
         vmImage: ubuntu-latest #or ubuntu-20.04
       steps:
       - template: ./templates/branch/generic.yml
+
+  - stage: testJob
+    displayName: "Testing job template"
+    - template: ./templates/stages/job.yml
             
   - stage: dev
     displayName: Run dev stage

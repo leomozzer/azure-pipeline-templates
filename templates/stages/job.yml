@@ -1,0 +1,10 @@
+pool:
+  vmImage: ubuntu-latest #or ubuntu-20.04
+
+jobs:
+  - job: jobA
+    steps:
+      - script: echo A job
+  - job: jobB
+    steps:
+      - script: echo B job
