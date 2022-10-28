@@ -38,6 +38,8 @@ stages:
       steps:
       - bash: ls -ltr
 
+  ### conditons based in the name of the branch
+
   - stage: mainCondition
     displayName: Conditions Checking when branch is main
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
@@ -96,13 +98,17 @@ stages:
       steps:
       - template: ./templates/branch/generic.yml
 
+  #### Dynamic stages based on branch name
+
   - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
     - stage: mainBranch
+      condition: always() #Added due the avoid skipping. When it's the first stage, doesn't need to add the condition
       jobs:
         - template: ./templates/jobs/jobs.yml
   
   - ${{ else }}:
     - stage: otherBranches
+      condition: always() #Added due the avoid skipping. When it's the first stage, doesn't need to add the condition
       jobs:
       - job: genericTemplate
         displayName: "Run a generic template"
