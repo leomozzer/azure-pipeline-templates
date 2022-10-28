@@ -1,0 +1,4 @@
+jobs:
+  - job: jobA
+    steps:
+      - script: echo Running in stage $(System.StageName)

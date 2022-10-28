@@ -113,7 +113,7 @@ stages:
           vmImage: ubuntu-latest 
         displayName: run dev template
         steps:
-        - template: ./templates/stages/dev.yml
+        - template: ./templates/steps/dev.yml
   
   - stage: approval
     displayName: Job to request for approval
@@ -145,7 +145,8 @@ stages:
           vmImage: ubuntu-latest 
         displayName: run prod template
         steps:
-        - template: ./templates/stages/prod.yml
+        - template: ./templates/steps/prod.yml
+      - template: ./templates/jobs/job.yml
         
 
 ## Run on strategy mode
