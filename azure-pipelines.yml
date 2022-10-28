@@ -19,7 +19,7 @@ stages:
       pool:
         vmImage: ubuntu-latest #or ubuntu-20.04
       steps:
-      - script: echo parameters ${{ parameters.myVar }}
+      - script: echo "parameters ${{ parameters.myVar }}"
       - script: echo parameters $(myVariable)
 
     - job: Windows
@@ -32,12 +32,11 @@ stages:
           targetType: 'inline'
           script: 'Write-Host "parameters: ${{ parameters.myVar }}"'
 
-
-    # - job: macOS
-    #   pool:
-    #     vmImage: macOS-latest
-    #   steps:
-    #   - bash: ls -ltr
+    - job: macOS
+      pool:
+        vmImage: macOS-latest
+      steps:
+      - bash: ls -ltr
 
   - stage: mainCondition
     displayName: Conditions Checking when branch is main
