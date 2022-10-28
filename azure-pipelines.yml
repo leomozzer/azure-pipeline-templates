@@ -97,7 +97,8 @@ stages:
 
   - stage: testJob
     displayName: "Testing job template"
-    - template: ./templates/stages/job.yml
+    jobs:
+      - template: ./templates/stages/job.yml
             
   - stage: dev
     displayName: Run dev stage
