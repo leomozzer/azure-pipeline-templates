@@ -54,7 +54,7 @@ stages:
     #     tfstate_file_name: '$(System.StageName).tfstate'
 
     - job: TerraformPlan
-      displayName: "Plan for ${{ System.StageName }}"
+      displayName: 'Plan for $(System.StageName)'
       steps:
       - template: ./templates/steps/terraform-plan.yaml
         parameters:
