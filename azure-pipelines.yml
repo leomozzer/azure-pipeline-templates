@@ -23,92 +23,6 @@ pool:
   
 
 stages:
-  ## Stage to test multiple platforms
-  # - stage: multiPool
-  #   displayName: Run diffrent pools
-  #   jobs:
-  #   - job: Linux
-  #     pool:
-  #       vmImage: ubuntu-latest #or ubuntu-20.04
-  #     steps:
-  #     - script: echo "parameters ${{ parameters.myVar }}"
-  #     - script: echo parameters $(myVariable)
-
-  #   - job: Windows
-  #     pool:
-  #       vmImage: windows-latest #or windows-2022
-  #     steps:
-  #     - task: PowerShell@2
-  #       displayName: Display parameter
-  #       inputs:
-  #         targetType: 'inline'
-  #         script: 'Write-Host "parameters: ${{ parameters.myVar }}"'
-
-  #   - job: macOS
-  #     pool:
-  #       vmImage: macOS-latest
-  #     steps:
-  #     - bash: ls -ltr
-
-  # ### conditons based in the name of the branch
-
-  # - stage: mainCondition
-  #   displayName: Conditions Checking when branch is main
-  #   condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
-  #   dependsOn: multiPool
-  #   jobs:
-  #   - job: NoCondtions
-  #     pool:
-  #       vmImage: ubuntu-latest #or ubuntu-20.04
-  #     steps:
-  #     - script: echo Performing the stage conditions in the main branch
-  #   - job: Condition1
-  #     condition: eq(variables['conditionTrigger1'], true)
-  #     pool:
-  #       vmImage: ubuntu-latest #or ubuntu-20.04
-  #     steps:
-  #     - script: echo If conditionTrigger1 === true then perform this job
-  #   - job: Condition2
-  #     condition: eq(variables['conditionTrigger2'], true)
-  #     pool:
-  #       vmImage: ubuntu-latest #or ubuntu-20.04
-  #     steps:
-  #     - script: echo If conditionTrigger2 === false then skip this job
-  #   - job: mainTemplate
-  #     displayName: "Run the main template"
-  #     pool:
-  #       vmImage: ubuntu-latest #or ubuntu-20.04
-  #     steps:
-  #     - template: ./templates/branch/main.yml
-
-  # - stage: brachConditions
-  #   displayName: Conditions Checking when branch is not main
-  #   dependsOn: multiPool
-  #   condition: ne(variables['Build.SourceBranch'], 'refs/heads/main')
-  #   jobs:
-  #   - job: NoCondtions
-  #     pool:
-  #       vmImage: ubuntu-latest #or ubuntu-20.04
-  #     steps:
-  #     - script: echo Performing the stage conditions in the $(Build.SourceBranch)
-  #   - job: Condition1
-  #     condition: eq(variables['conditionTrigger1'], true)
-  #     pool:
-  #       vmImage: ubuntu-latest #or ubuntu-20.04
-  #     steps:
-  #     - script: echo If conditionTrigger1 === true then perform this job
-  #   - job: Condition2
-  #     condition: eq(variables['conditionTrigger2'], true)
-  #     pool:
-  #       vmImage: ubuntu-latest #or ubuntu-20.04
-  #     steps:
-  #     - script: echo If conditionTrigger2 === false then skip this job
-  #   - job: genericTemplate
-  #     displayName: "Run a generic template"
-  #     pool:
-  #       vmImage: ubuntu-latest #or ubuntu-20.04
-  #     steps:
-  #     - template: ./templates/branch/generic.yml
 
   - stage: configuration
     jobs:
@@ -166,10 +80,10 @@ stages:
       jobs:
       - job: ManualValidation
         pool: server
-        timeoutInMinutes: 15 # job times out in 3 days
+        timeoutInMinutes: 15 # job times out in 15 minutes
         steps:
         - task: ManualValidation@0
-          timeoutInMinutes: 10 # task times out in 1 day
+          timeoutInMinutes: 10 # task times out in 10 minutes
           inputs:
               notifyUsers: |
                   mozzer.ferraz@gmail.com
@@ -208,96 +122,9 @@ stages:
             tfstate_file_name: '$(System.StageName).tfstate'
             var_file: '${{ variables.tf_script_path }}/$(System.StageName).tfvars'
 
-      # - job: genericTemplate
-      #   displayName: "Run a generic template"
-      #   pool:
-      #     vmImage: ubuntu-latest #or ubuntu-20.04
-      #   steps:
-      #   - template: ./templates/branch/generic.yml
 
   # - stage: testJob
   #   displayName: "Testing job template"
   #   condition: always()
   #   jobs:
   #     - template: ./templates/jobs/jobs.yml
-            
-  # - stage: dev
-  #   displayName: Run dev stage
-  #   dependsOn:
-  #   - mainCondition
-  #   - brachConditions
-  #   condition: or(succeeded('mainCondition'), succeeded('brachConditions'))
-  #   jobs:
-  #     - job: build
-  #       pool:
-  #         vmImage: ubuntu-latest 
-  #       displayName: run dev template
-  #       steps:
-  #       - template: ./templates/steps/dev.yml
-  
-  # - stage: approval
-  #   displayName: Job to request for approval
-  #   condition: and(succeeded('mainCondition'), succeeded('dev'))
-  #   dependsOn: 
-  #   - mainCondition
-  #   - dev
-  #   jobs:
-  #   - job: ManualValidation
-  #     pool: server
-  #     timeoutInMinutes: 15 # job times out in 3 days
-  #     steps:
-  #     - task: ManualValidation@0
-  #       timeoutInMinutes: 10 # task times out in 1 day
-  #       inputs:
-  #           notifyUsers: |
-  #               mozzer.ferraz@gmail.com
-  #           instructions: 'Please validate the build configuration and resume'
-  #           onTimeout: 'reject '
-
-  # - stage: prod
-  #   displayName: Run prod stage
-  #   dependsOn: 
-  #   - approval
-  #   condition: succeeded('approval')
-  #   jobs:
-  #     - job: build
-  #       pool:
-  #         vmImage: ubuntu-latest 
-  #       displayName: run prod template
-  #       steps:
-  #       - template: ./templates/steps/prod.yml
-  #     - template: ./templates/jobs/jobs.yml
-        
-
-## Run on strategy mode
-#will perform only using "steps"
-# strategy:
-#   matrix:
-#     linux:
-#       imageName: "ubuntu-latest"
-#     mac:
-#       imageName: "macOS-latest"
-#     windows:
-#       imageName: "windows-latest"
-#   maxParallel: 3
-
-# pool:
-#   vmImage: $(imageName)
-
-# steps:
-# - bash: ls -ltr
-# - bash: echo "Parameters ${{ parameters.myVar }}"
-# - task: Bash@3
-#   displayName: Display Variable
-#   inputs:
-#     targetType: 'inline'
-#     script: echo 'Variables $(myVariable)'
-# - task: AzureCLI@2
-#   displayName: 'Azure CLI'
-#   inputs:
-#     azureSubscription: 'SC-AzureDevOps'
-#     scriptType: 'pscore'
-#     scriptLocation: 'inlineScript'
-#     inlineScript: |
-#       Write-host "Hello"
-#       az group list
