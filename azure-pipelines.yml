@@ -54,7 +54,7 @@ stages:
     #     tfstate_file_name: '$(System.StageName).tfstate'
 
     - job: TerraformPlan
-      displayName: "Plan for $(System.StageName)"
+      displayName: "Plan for ${{ System.StageName }}"
       steps:
       - template: ./templates/steps/terraform-plan.yaml
         parameters:
@@ -102,49 +102,37 @@ stages:
               instructions: 'Please validate the build configuration and resume'
               onTimeout: 'reject'
 
-      - template: ./templates/terraform.yaml
-        parameters:
-          stage: $(System.StageName)
-          tfstate_storage_account_resource_group_name: ${{ variables.tfstate_storage_account_resource_group_name }}
-          service_connection_name: ${{ variables.service_connection_name }}
-          tfstate_storage_account_name: ${{ variables.tfstate_storage_account_name }}
-          tf_version: ${{ variables.tf_version }}
-          project_name: ${{ variables.project_name }}
-          working_path: '${{ variables.tf_script_path }}'
-          var_file: '${{ variables.tf_script_path }}/$(System.StageName).tfvars'
-          tfstate_file_name: '$(System.StageName).tfstate'
+      - job: TerraformPlan
+        displayName: "Plan for $(System.StageName)"
+        dependsOn: ManualValidation
+        steps:
+        - template: ./templates/terraform-plan.yaml
+          parameters:
+            stage: $(System.StageName)
+            tfstate_storage_account_resource_group_name: ${{ variables.tfstate_storage_account_resource_group_name }}
+            service_connection_name: ${{ variables.service_connection_name }}
+            tfstate_storage_account_name: ${{ variables.tfstate_storage_account_name }}
+            tf_version: ${{ variables.tf_version }}
+            project_name: ${{ variables.project_name }}
+            working_path: '${{ variables.tf_script_path }}'
+            var_file: '${{ variables.tf_script_path }}/$(System.StageName).tfvars'
+            tfstate_file_name: '$(System.StageName).tfstate'
 
-      # - job: TerraformPlan
-      #   displayName: "Plan for $(System.StageName)"
-      #   dependsOn: ManualValidation
-      #   steps:
-      #   - template: ./templates/terraform-plan.yaml
-      #     parameters:
-      #       stage: $(System.StageName)
-      #       tfstate_storage_account_resource_group_name: ${{ variables.tfstate_storage_account_resource_group_name }}
-      #       service_connection_name: ${{ variables.service_connection_name }}
-      #       tfstate_storage_account_name: ${{ variables.tfstate_storage_account_name }}
-      #       tf_version: ${{ variables.tf_version }}
-      #       project_name: ${{ variables.project_name }}
-      #       working_path: '${{ variables.tf_script_path }}'
-      #       var_file: '${{ variables.tf_script_path }}/$(System.StageName).tfvars'
-      #       tfstate_file_name: '$(System.StageName).tfstate'
-
-      # - job: TerraformApply
-      #   displayName: "Apply for $(System.StageName)"
-      #   dependsOn: TerraformPlan
-      #   steps:
-      #   - template: ./templates/terraform-apply.yaml
-      #     parameters:
-      #       stage: $(System.StageName)
-      #       tfstate_storage_account_resource_group_name: ${{ variables.tfstate_storage_account_resource_group_name }}
-      #       service_connection_name: ${{ variables.service_connection_name }}
-      #       tfstate_storage_account_name: ${{ variables.tfstate_storage_account_name }}
-      #       tf_version: ${{ variables.tf_version }}
-      #       project_name: ${{ variables.project_name }}
-      #       working_path: '${{ variables.tf_script_path }}'
-      #       tfstate_file_name: '$(System.StageName).tfstate'
-      #       var_file: '${{ variables.tf_script_path }}/$(System.StageName).tfvars'
+      - job: TerraformApply
+        displayName: "Apply for $(System.StageName)"
+        dependsOn: TerraformPlan
+        steps:
+        - template: ./templates/terraform-apply.yaml
+          parameters:
+            stage: $(System.StageName)
+            tfstate_storage_account_resource_group_name: ${{ variables.tfstate_storage_account_resource_group_name }}
+            service_connection_name: ${{ variables.service_connection_name }}
+            tfstate_storage_account_name: ${{ variables.tfstate_storage_account_name }}
+            tf_version: ${{ variables.tf_version }}
+            project_name: ${{ variables.project_name }}
+            working_path: '${{ variables.tf_script_path }}'
+            tfstate_file_name: '$(System.StageName).tfstate'
+            var_file: '${{ variables.tf_script_path }}/$(System.StageName).tfvars'
 
 
   # - stage: testJob
