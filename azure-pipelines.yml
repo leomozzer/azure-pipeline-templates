@@ -132,7 +132,7 @@ stages:
             resource_group_location: "eastus"
             service_connection_name: ${{ variables.service_connection_name }}
 
-      - job: Plan&Apply
+      - job: Plan_Apply
         displayName: Plan and Apply for $(Build.SourceBranch)
         steps:
         - template: ./templates/terraform-plan.yaml
