@@ -56,7 +56,7 @@ stages:
     - job: TerraformPlan
       displayName: "Plan for $(System.StageName)"
       steps:
-      - template: ./templates/terraform-plan.yaml
+      - template: ./templates/steps/terraform-plan.yaml
         parameters:
           stage: $(System.StageName)
           tfstate_storage_account_resource_group_name: ${{ variables.tfstate_storage_account_resource_group_name }}
@@ -72,7 +72,7 @@ stages:
       displayName: "Apply for $(System.StageName)"
       dependsOn: TerraformPlan
       steps:
-      - template: ./templates/terraform-apply.yaml
+      - template: ./templates/steps/terraform-apply.yaml
         parameters:
           stage: $(System.StageName)
           tfstate_storage_account_resource_group_name: ${{ variables.tfstate_storage_account_resource_group_name }}
