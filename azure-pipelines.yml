@@ -146,14 +146,14 @@ stages:
       - template: ./templates/terraform-apply.yaml
         parameters:
           stage: $(System.StageName)
-            tfstate_storage_account_resource_group_name: ${{ variables.tfstate_storage_account_resource_group_name }}
-            service_connection_name: ${{ variables.service_connection_name }}
-            tfstate_storage_account_name: ${{ variables.tfstate_storage_account_name }}
-            tf_version: ${{ variables.tf_version }}
-            project_name: ${{ variables.project_name }}
-            working_path: '${{ variables.tf_script_path }}'
-            tfstate_file_name: '$(System.StageName).tfstate'
-            var_file: '${{ variables.tf_script_path }}/$(System.StageName).tfvars'
+          tfstate_storage_account_resource_group_name: ${{ variables.tfstate_storage_account_resource_group_name }}
+          service_connection_name: ${{ variables.service_connection_name }}
+          tfstate_storage_account_name: ${{ variables.tfstate_storage_account_name }}
+          tf_version: ${{ variables.tf_version }}
+          project_name: ${{ variables.project_name }}
+          working_path: '${{ variables.tf_script_path }}'
+          tfstate_file_name: '$(System.StageName).tfstate'
+          var_file: '${{ variables.tf_script_path }}/$(System.StageName).tfvars'
 
 # #### Dynamic stages based on branch name
   - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
