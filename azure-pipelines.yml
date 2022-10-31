@@ -124,8 +124,6 @@ stages:
           service_connection_name: ${{ variables.service_connection_name }}
   
   - stage: dev
-    dependsOn: configuration
-    condition: succeeded('configuration')
     jobs:
     - job: Plan_Apply
       displayName: Plan and Apply for $(Build.SourceBranch)
