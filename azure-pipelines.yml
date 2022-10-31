@@ -127,8 +127,8 @@ stages:
     dependsOn: configuration
     condition: succeeded('configuration')
     jobs:
-    - job: Plan_Apply
-      displayName: Plan and Apply for $(Build.SourceBranch)
+    - job: TerraformPlan
+      displayName: "Plan for $(Build.SourceBranch)"
       steps:
       - template: ./templates/terraform-plan.yaml
         parameters:
@@ -142,6 +142,10 @@ stages:
           var_file: '${{ variables.tf_script_path }}/$(System.StageName).tfvars'
           tfstate_file_name: '$(System.StageName).tfstate'
 
+    - job: TerraformApply
+      displayName: "Apply for $(Build.SourceBranch)"
+      dependsOn: TerraformPlan
+      steps:
       - template: ./templates/terraform-apply.yaml
         parameters:
           stage: $(System.StageName)
