@@ -134,6 +134,7 @@ stages:
 
       - job: Plan_Apply
         displayName: Plan and Apply for $(Build.SourceBranch)
+        dependsOn: AzureConfigure
         steps:
         - template: ./templates/terraform-plan.yaml
           parameters:
