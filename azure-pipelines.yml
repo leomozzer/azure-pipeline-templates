@@ -16,7 +16,7 @@ pool:
 stages:
   - stage: audit
     jobs:
-    - job: Audit TF files
+    - job: tfsec
       displayName: Run tfsec
       steps:
       - template: ./templates/tfsec/tfsec.yaml
@@ -25,6 +25,8 @@ stages:
           working_path: ${{ variables.tf_script_path }}
 
   - stage: configuration
+    dependsOn: audit
+    condition: succeeded('audit')
     jobs:
     - job: AzureConfigure
       displayName: Configure storage account for state files
@@ -41,7 +43,6 @@ stages:
     dependsOn: configuration
     condition: succeeded('configuration')
     jobs:
-
     - job: TerraformPlan
       displayName: 'Plan for dev'
       steps:
