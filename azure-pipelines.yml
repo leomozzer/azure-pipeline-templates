@@ -31,7 +31,7 @@ stages:
     - job: AzureConfigure
       displayName: Configure storage account for state files
       steps:
-      - template: ./templates/azure-setup.yaml
+      - template: ./templates/steps/azure-setup.yaml
         parameters:
           tags: '"UseCase=Terraform" "Stage=$(System.StageName)" "Branch=$(Build.SourceBranch)"'
           resource_group_name: ${{ variables.tfstate_storage_account_resource_group_name }}
