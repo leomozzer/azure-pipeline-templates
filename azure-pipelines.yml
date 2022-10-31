@@ -1,11 +1,3 @@
-# parameters:
-#   - name: myVar
-#     default: "It's alive!"
-
-# variables:
-#   myVariable: 'ValueFromVar'
-#   conditionTrigger1: true
-#   conditionTrigger2: false
 
 variables:
   build_counter: $[counter('build-counter-$(RELEASE_NAME)', 1)]
@@ -21,8 +13,16 @@ variables:
 pool:
   vmImage: ubuntu-latest #The pool can be used not only inside of each job
   
-
 stages:
+  - stage: audit
+    jobs:
+    - job: Audit TF files
+      displayName: Run tfsec
+      steps:
+      - template: ./templates/tfsec/tfsec.yaml
+        parameters:
+          artifact_name: 'terraform-live'
+          working_path: ${{ variables.tf_script_path }}
 
   - stage: configuration
     jobs:
@@ -41,20 +41,9 @@ stages:
     dependsOn: configuration
     condition: succeeded('configuration')
     jobs:
-    # - template: ./templates/terraform.yaml
-    #   parameters:
-    #     stage: $(System.StageName)
-    #     tfstate_storage_account_resource_group_name: ${{ variables.tfstate_storage_account_resource_group_name }}
-    #     service_connection_name: ${{ variables.service_connection_name }}
-    #     tfstate_storage_account_name: ${{ variables.tfstate_storage_account_name }}
-    #     tf_version: ${{ variables.tf_version }}
-    #     project_name: ${{ variables.project_name }}
-    #     working_path: '${{ variables.tf_script_path }}'
-    #     var_file: '${{ variables.tf_script_path }}/$(System.StageName).tfvars'
-    #     tfstate_file_name: '$(System.StageName).tfstate'
 
     - job: TerraformPlan
-      displayName: 'Plan for $(System.StageName)'
+      displayName: 'Plan for dev'
       steps:
       - template: ./templates/steps/terraform-plan.yaml
         parameters:
@@ -69,7 +58,7 @@ stages:
           tfstate_file_name: '$(System.StageName).tfstate'
 
     - job: TerraformApply
-      displayName: "Apply for $(System.StageName)"
+      displayName: "Apply for dev"
       dependsOn: TerraformPlan
       steps:
       - template: ./templates/steps/terraform-apply.yaml
@@ -103,7 +92,7 @@ stages:
               onTimeout: 'reject'
 
       - job: TerraformPlan
-        displayName: "Plan for $(System.StageName)"
+        displayName: "Plan for prod"
         dependsOn: ManualValidation
         steps:
         - template: ./templates/steps/terraform-plan.yaml
@@ -119,7 +108,7 @@ stages:
             tfstate_file_name: '$(System.StageName).tfstate'
 
       - job: TerraformApply
-        displayName: "Apply for $(System.StageName)"
+        displayName: "Apply for prod"
         dependsOn: TerraformPlan
         steps:
         - template: ./templates/steps/terraform-apply.yaml
@@ -133,10 +122,3 @@ stages:
             working_path: '${{ variables.tf_script_path }}'
             tfstate_file_name: '$(System.StageName).tfstate'
             var_file: '${{ variables.tf_script_path }}/$(System.StageName).tfvars'
-
-
-  # - stage: testJob
-  #   displayName: "Testing job template"
-  #   condition: always()
-  #   jobs:
-  #     - template: ./templates/jobs/jobs.yml

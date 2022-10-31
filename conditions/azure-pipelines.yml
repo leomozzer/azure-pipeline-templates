@@ -1,8 +1,0 @@
-pool:
-  vmImage: ubuntu-latest
-
-jobs:
-  - job:
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-    steps:
-    - script: "Hello there"
