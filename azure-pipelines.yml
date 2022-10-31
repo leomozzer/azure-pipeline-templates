@@ -164,8 +164,21 @@ stages:
       dependsOn: dev
       condition: succeeded('dev')
       jobs:
+      - job: ManualValidation
+        pool: server
+        timeoutInMinutes: 15 # job times out in 3 days
+        steps:
+        - task: ManualValidation@0
+          timeoutInMinutes: 10 # task times out in 1 day
+          inputs:
+              notifyUsers: |
+                  mozzer.ferraz@gmail.com
+              instructions: 'Please validate the build configuration and resume'
+              onTimeout: 'reject'
+
       - job: TerraformPlan
         displayName: "Plan for $(System.StageName)"
+        dependsOn: ManualValidation
         steps:
         - template: ./templates/terraform-plan.yaml
           parameters:
